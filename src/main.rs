@@ -41,7 +41,22 @@ fn offset<T>(n: u32) -> *const c_void {
 
 // == // Modify and complete the function below for the first task
 // unsafe fn FUNCTION_NAME(ARGUMENT_NAME: &Vec<f32>, ARGUMENT_NAME: &Vec<u32>) -> u32 { } 
+unsafe fn MakeVertex(inVector: &Vec<f32>, inArray: &Vec<u32>) -> u32 {
+    let points = [ 0.0,  0.5,  0.0, 0.5, -0.5,  0.0, -0.5, -0.5,  0.0];
 
+    let mut vbo = 0; 
+    gl::GenBuffers(1, &vbo); 
+    gl::BindBuffer(gl::ARRAY_BUFFER, vbo); 
+    gl::BufferData(gl::ARRAY_BUFFER, 1000, points, gl::STATIC_DRAW);
+
+
+    let mut vao = 0; 
+    gl::GenVertexArrays(1, &vao); 
+    gl::BindVertexArray(vao); 
+    gl::EnableVertexAttribArray(0); 
+    gl::BindBuffer(gl::ARRAY_BUFFER, vbo); 
+    gl::VertexAttribPointer(0,3,gl::FLOAT, gl::FALSE, 0, std::ptr::null);
+}
 fn main() {
     // Set up the necessary objects to deal with windows and event handling
     let el = glutin::event_loop::EventLoop::new();
