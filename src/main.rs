@@ -101,20 +101,49 @@ fn main() {
             gl::Enable(gl::DEBUG_OUTPUT_SYNCHRONOUS);
             gl::DebugMessageCallback(Some(util::debug_callback), ptr::null());
         }
-
+/*
         // == // Set up your VAO here
-
-        let points = vec![-0.6,-0.6,0.0,0.6,-0.6,0.0,0.0,0.6,0.0];
+        let mut points: Vec<f32> = Vec::new();
+        let n: u32 = 5;
+        for i in 1..n + 1 {
+            let i2 = i as f32;
+            let size = 0.1;
+            let offset = 0.9 - size * i2 * (i2 + 1.) / 2.;
+            let triangle = vec![
+                -size * i2,
+                offset,
+                0.,
+                size * i2,
+                offset,
+                0.,
+                0.,
+                offset + size * i2,
+                0.,
+            ];
+            points.extend_from_slice(&triangle);
+        }
+        //set up indices
+        let index: Vec<u32> = (0..(n * 3)).collect();
+*/
+ /*       let points = vec![
+           -0.6,-0.6,0.0,0.6,-0.6,0.0,0.0,0.6,0.0];
         let index = vec![0,1,2];
+*/
 
+
+        let points = vec! [
+            0.6,-0.8,0.0,
+            0.0,0.4,0.0,
+            -0.8,-0.2,0.0];
+        let index = vec![1,2,3];
         let vao = unsafe {
-            MakeVertex(points, index)
+            MakeVertex(&points, &index)
         };
 
         // Basic usage of shader helper
         // The code below returns a shader object, which contains the field .program_id
         // The snippet is not enough to do the assignment, and will need to be modified (outside of just using the correct path)
-        let shader =  unsafe {
+        let programID = unsafe {
             shader::ShaderBuilder::new().attach_file("./shaders/simple.vert").attach_file("./shaders/simple.frag").link()
             };
         
@@ -153,8 +182,8 @@ fn main() {
 
                 // Issue the necessary commands to draw your scene here
                 gl::BindVertexArray(vao); 
-                gl::UseProgram(shader);
-                gl::DrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, ptr::null());
+                gl::UseProgram(programID.program_id);
+                gl::DrawElements(gl::TRIANGLES, 3, gl::UNSIGNED_INT, ptr::null());
 
 
 
