@@ -41,7 +41,7 @@ fn offset<T>(n: u32) -> *const c_void {
 
 // == // Modify and complete the function below for the first task
 // unsafe fn FUNCTION_NAME(ARGUMENT_NAME: &Vec<f32>, ARGUMENT_NAME: &Vec<u32>) -> u32 { } 
-unsafe fn MakeVertex(inVector: &Vec<f32>, inArray: &Vec<u32>) -> u32 {
+unsafe fn MakeVertex(inVector: &Vec<f32>, inArray: &Vec<u32>, colorArray: &Vec<f32>) -> u32 {
 
 
 
@@ -58,12 +58,20 @@ unsafe fn MakeVertex(inVector: &Vec<f32>, inArray: &Vec<u32>) -> u32 {
     gl::EnableVertexAttribArray(0); 
     gl::VertexAttribPointer(0,3,gl::FLOAT, gl::FALSE, 0, std::ptr::null());
 
+    let mut vbocolor = 0; 
+    gl::GenBuffers(1, &mut vbocolor); 
+    gl::BindBuffer(gl::ARRAY_BUFFER, vbocolor); 
+    gl::BufferData(gl::ARRAY_BUFFER, byte_size_of_array(&colorArray), pointer_to_array(&colorArray), gl::STATIC_DRAW);
+    gl::EnableVertexAttribArray(0); 
+    gl::VertexAttribPointer(0,4,gl::FLOAT, gl::FALSE, 0, std::ptr::null());
+
+
     let mut  vib = 0; 
     gl::GenBuffers(1, &mut vib); 
     gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, vib); 
     gl::BufferData(gl::ELEMENT_ARRAY_BUFFER, byte_size_of_array(&inArray), pointer_to_array(&inArray), gl::STATIC_DRAW);
 
-
+    
     return vao; 
 }
 fn main() {
